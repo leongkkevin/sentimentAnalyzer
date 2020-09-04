@@ -25,5 +25,6 @@ foreach(file IN LISTS input01 input02 input03 input04)
 endforeach()
 
 set(CMAKE_CXX_STANDARD 17)
-add_executable(${EXE_NAME} main.cpp DSString.cpp DSString.h Classifier.cpp Classifier.h test.cpp)
+add_executable(${EXE_NAME} main.cpp DSString.cpp DSString.h Classifier.cpp Classifier.h catch.hpp)
+add_executable(TestBench test.cpp)
 

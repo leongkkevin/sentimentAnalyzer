@@ -29,10 +29,8 @@ int main(int argc, char* argv[]) {
 
     arrayParse(reviewArray, ratingVector, commentVector);
 
-    vector<DSString> test;
-    test.push_back("hello");
-    DSString test2 = "cheese";
-    test.push_back(test2);
+    DSString string("poop");
+
 
 
     return 0;

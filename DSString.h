@@ -67,7 +67,7 @@ public:
     /**
      * getLength() returns the number (count) of characters in the string.
      **/
-    int getSize();
+    int getLength();
     int getCap();
 
     /**

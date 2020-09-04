@@ -23,7 +23,7 @@ DSString::DSString(const DSString &newString) {
 }
 
 DSString::~DSString() {
-//    delete data;
+    delete [] data;
 }
 
 void DSString::resize(int newCapacity){
@@ -49,14 +49,14 @@ void DSString::resize(int newCapacity){
 }
 
 int DSString::createSize(const char *newData){
-    int wordLength = 0;
-    while(newData[wordLength] != '\0'){
-        wordLength++;
-    }
+    int wordLength = strlen(newData);;
+//    while(newData[wordLength] != '\0'){
+//        wordLength++;
+//    }
     return wordLength;
 }
 
-int DSString::getSize() {
+int DSString::getLength() {
     return this->size;
 }
 int DSString::getCap() {
@@ -132,22 +132,27 @@ DSString &DSString::operator=(const DSString &newString) {
 
 DSString DSString::operator+(const DSString &addData) {
     DSString temp = *this;
-    temp.size = this->getSize();
+    temp.size = this->getLength();
     temp.capacity = this->getCap();
 
     //resize if necessary
-    if(addData.size + temp.getSize() > temp.getCap()){
-        temp.resize(addData.size + temp.getSize());
+    if(addData.size + temp.getLength() > temp.getCap()){
+        temp.resize(addData.size + temp.getLength());
     }
 
     //copy data in data's data
     int j = 0;
-    for(int i = temp.getSize(); i < temp.getCap(); ++i) {
+    for(int i = temp.getLength(); i < temp.getCap(); ++i) {
         temp.data[i] = addData.data[j];
         ++j;
     }
 
     return temp;
+}
+
+std::ostream &operator<<(std::ostream &out, const DSString &outString) {
+        out << outString.data;
+        return out;
 }
 
 
