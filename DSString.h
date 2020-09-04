@@ -29,12 +29,13 @@ private:
      *    A quick google search will return plenty of references on
      *    the c-string functions.
      **/
-    int capacity;
     int size;
-    char *data{};
+    int capacity;
+
 
 
 public:
+    char *data{};
 
     /**
      * Constructors and destructor
@@ -66,7 +67,8 @@ public:
     /**
      * getLength() returns the number (count) of characters in the string.
      **/
-    int getLength();
+    int getSize();
+    int getCap();
 
     /**
      * The substring method returns a string object that contains a
@@ -97,6 +99,11 @@ public:
     //Further - you will be able to update and modify this class as the
     //semester progresses.
 
+    void resize(int newCapacity);
+
+    int createSize(const char *newData);
+
+    void append(const DSString &addData);
 };
 
 

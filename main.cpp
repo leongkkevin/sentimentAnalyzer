@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "DSString.h"
-
 #include "Classifier.h"
 
 using namespace std;
@@ -30,6 +28,12 @@ int main(int argc, char* argv[]) {
     fileParse(fin, reviewArray);
 
     arrayParse(reviewArray, ratingVector, commentVector);
+
+    vector<DSString> test;
+    test.push_back("hello");
+    DSString test2 = "cheese";
+    test.push_back(test2);
+
 
     return 0;
 }

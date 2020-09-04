@@ -7,6 +7,8 @@
 #include <vector>
 #include <sstream>
 
+#include "DSString.h"
+
 using namespace std;
 
 #ifndef S20_PA01_SENTIMENTANALYSIS_CLASSIFIER_H
