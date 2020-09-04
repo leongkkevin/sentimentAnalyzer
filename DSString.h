@@ -31,11 +31,12 @@ private:
      **/
     int size;
     int capacity;
+    char* data;
 
 
 
 public:
-    char *data{};
+
 
     /**
      * Constructors and destructor
@@ -69,6 +70,8 @@ public:
      **/
     int getLength();
     int getCap();
+    char* getData();
+    void setInfo();
 
     /**
      * The substring method returns a string object that contains a
@@ -101,9 +104,10 @@ public:
 
     void resize(int newCapacity);
 
-    int createSize(const char *newData);
+    int createLength(const char *newData);
 
     void append(const DSString &addData);
+
 };
 
 

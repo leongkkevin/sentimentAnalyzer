@@ -16,21 +16,19 @@ int main(int argc, char* argv[]) {
     ifstream fin;
     fin.open("IMDB.csv");
 
-    string topString;
-    getline(fin, topString, '\n');
+    DSString topString;
+    fin.getline(topString.getData(), 200000);
+    //getline(fin, topString, '\n');
     cout << topString << endl;
 
     //string reviewArray[10];
-    vector<string> reviewArray;
-    vector<string> ratingVector;
-    vector<string> commentVector;
+    vector<DSString> reviewArray;
+    vector<DSString> ratingVector;
+    vector<DSString> commentVector;
 
     fileParse(fin, reviewArray);
 
     arrayParse(reviewArray, ratingVector, commentVector);
-
-    DSString string("poop");
-
 
 
     return 0;

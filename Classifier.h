@@ -14,44 +14,52 @@ using namespace std;
 #ifndef S20_PA01_SENTIMENTANALYSIS_CLASSIFIER_H
 #define S20_PA01_SENTIMENTANALYSIS_CLASSIFIER_H
 
-void fileParse(ifstream &fin, vector<string> &reviewArray) {
-
-    //string reviewArray[10];
-    for (int i = 0; i < 1000; ++i) { //PUT AMOUNT OF REVIEWS THERE
-        string tempString;
-        getline(fin, tempString, '\n');
+void fileParse(ifstream &fin, vector<DSString> &reviewArray) {
+    for (int i = 0; i < 20000; ++i) { //PUT AMOUNT OF REVIEWS THERE!!!!!!!!!!!!!!
+        char tempChar[15000];
+        fin.getline(tempChar, 15000, '\n');
+        //getline(fin, tempString, '\n');
+        DSString tempString = tempChar;
         reviewArray.push_back(tempString);
-        //cout << reviewArray[i] << endl;
     }
 
 }
 
-void arrayParse(vector<string> &reviewArray, vector<string> &ratingVector, vector<string> &commentVector){
+void arrayParse(vector<DSString> &reviewArray, vector<DSString> &ratingVector, vector<DSString> &commentVector){
 
-    for(int i = 0; i < reviewArray.size(); i++) {
-        vector<string> wordArray;
+    for(int i = 0; i < reviewArray.size() - 0; i++) {
+        vector<DSString> wordArray;
 
         stringstream ss;
-        string sentenceString;
+        DSString sentenceString;
         sentenceString = reviewArray.at(i);
-        ss << sentenceString;
+        ss << sentenceString.getData();
 
-        string tempString;
+        //DSString tempString;
+        char tempChar[15000];
 
-        while (getline(ss, tempString, ',')) {
+        while (ss.getline(tempChar, 15000, ',')){ //getline(ss, tempString, ',')) {
+            DSString tempString;
+            tempString = tempChar;
             wordArray.push_back(tempString);
         }
-        reverse(wordArray.begin(), wordArray.end());
-        ratingVector.push_back(wordArray[0]);
+        //reverse(wordArray.begin(), wordArray.end());
+        ratingVector.push_back(wordArray[wordArray.size() - 1]);
 
-        reverse(wordArray.begin(), wordArray.end());
+        //reverse(wordArray.begin(), wordArray.end());
         wordArray.pop_back();
 
-        string fullComment;
-        for (int i = 0; i < wordArray.size(); ++i) {
-            fullComment = fullComment + wordArray.at(i);
+        char charComment[15000];
+        for (int j = 0; j < wordArray.size(); ++j) {
+            strcat(charComment, wordArray.at(j).getData());
+            //charComment = charComment + wordArray.at(i);
+            //fullComment = fullComment + wordArray.at(i);
         }
+        DSString fullComment(charComment);
         commentVector.push_back(fullComment);
+
+        wordArray.clear();
+
     }
 
 }
