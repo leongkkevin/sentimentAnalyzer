@@ -15,7 +15,7 @@ using namespace std;
 #define S20_PA01_SENTIMENTANALYSIS_CLASSIFIER_H
 
 void fileParse(ifstream &fin, vector<DSString> &reviewArray) {
-    for (int i = 0; i < 20000; ++i) { //PUT AMOUNT OF REVIEWS THERE!!!!!!!!!!!!!!
+    for (int i = 0; i < 50000; ++i) { //PUT AMOUNT OF REVIEWS THERE!!!!!!!!!!!!!!
         char tempChar[15000];
         fin.getline(tempChar, 15000, '\n');
         //getline(fin, tempString, '\n');
