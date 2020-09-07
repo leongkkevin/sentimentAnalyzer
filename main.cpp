@@ -8,18 +8,12 @@ using namespace std;
 
 
 int main(int argc, char* argv[]) {
-//    std::cout << "Hello, World!" << std::endl;
-//    std::ofstream fout("output01.txt");
-//    fout << "Hello world!" << std::endl;
-//    fout.close();
+
 
     ifstream fin;
     fin.open("IMDB.csv");
 
-    DSString topString;
-    fin.getline(topString.getData(), 200000);
-    //getline(fin, topString, '\n');
-    cout << topString << endl;
+    getTop(fin);
 
     //string reviewArray[10];
     vector<DSString> reviewArray;
