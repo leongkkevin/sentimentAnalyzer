@@ -15,14 +15,14 @@ int main(int argc, char* argv[]) {
 
     getTop(fin);
 
-    //string reviewArray[10];
-    vector<DSString> reviewArray;
+    //string reviewVector[10];
+    vector<DSString> reviewVector;
     vector<DSString> ratingVector;
     vector<DSString> commentVector;
 
-    fileParse(fin, reviewArray);
+    fileParse(fin, reviewVector);
 
-    arrayParse(reviewArray, ratingVector, commentVector);
+    arrayParse(reviewVector, ratingVector, commentVector);
 
 
     return 0;

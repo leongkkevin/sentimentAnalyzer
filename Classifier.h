@@ -17,58 +17,57 @@ using namespace std;
 void getTop(ifstream &fin){
     DSString topString;
     fin.getline(topString.getData(), 200000);
-    //getline(fin, topString, '\n');
-    cout << topString << endl;
+    //cout << topString << endl;
 }
 
-void fileParse(ifstream &fin, vector<DSString> &reviewArray) {
+void fileParse(ifstream &fin, vector<DSString> &reviewVector) {
     for (int i = 0; i < 50000; ++i) { //PUT AMOUNT OF REVIEWS THERE!!!!!!!!!!!!!!
         char tempChar[15000];
         fin.getline(tempChar, 15000, '\n');
         DSString tempString = tempChar;
-        reviewArray.push_back(tempString);
+        reviewVector.push_back(tempString);
     }
 
 //    char tempChar[15000];
 //    while(fin.getline(tempChar, 15000, '\n')){
 //        DSString tempString = tempChar;
-//        reviewArray.push_back(tempString);
+//        reviewVector.push_back(tempString);
 //    }
 
 }
 
-void arrayParse(vector<DSString> &reviewArray, vector<DSString> &ratingVector, vector<DSString> &commentVector){
+void arrayParse(vector<DSString> &reviewVector, vector<DSString> &ratingVector, vector<DSString> &commentVector){
 
-    for(int i = 0; i < reviewArray.size() - 0; i++) {
-        vector<DSString> wordArray;
+    for(int i = 0; i < reviewVector.size() - 0; i++) {
+        vector<DSString> fullCommentVector;
 
         stringstream ss;
-        DSString sentenceString = reviewArray.at(i);
+        DSString sentenceString = reviewVector.at(i);
         ss << sentenceString.getData();
 
-        char tempChar[15000];
+        char tempCharArray[15000];
 
-        while (ss.getline(tempChar, 15000, ',')){
+        while (ss.getline(tempCharArray, 15000, ',')){
             DSString tempString;
-            tempString = tempChar;
-            wordArray.push_back(tempString);
+            tempString = tempCharArray;
+            fullCommentVector.push_back(tempString);
         }
         //reverse(wordArray.begin(), wordArray.end());
-        ratingVector.push_back(wordArray[wordArray.size() - 1]);
+        ratingVector.push_back(fullCommentVector[fullCommentVector.size() - 1]);
 
         //reverse(wordArray.begin(), wordArray.end());
-        wordArray.pop_back();
+        fullCommentVector.pop_back();
 
         //rebuild the comment
         char charComment[15000];
-        for (int j = 0; j < wordArray.size(); ++j) {
-            strcat(charComment, wordArray.at(j).getData());
+        for (int j = 0; j < fullCommentVector.size(); ++j) {
+            strcat(charComment, fullCommentVector.at(j).getData());
         }
 
         DSString fullComment(charComment);
         commentVector.push_back(fullComment);
 
-        wordArray.clear();
+        fullCommentVector.clear();
 
         cout << i << endl;
 
