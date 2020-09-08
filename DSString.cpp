@@ -46,6 +46,9 @@ void DSString::resize(int newCapacity){
         temp[i] = data[i];
     }
 
+    //delete old data
+    delete this->data;
+
     //new data with new capacity;
     this->data = new char[newCapacity + 1];
 
@@ -56,9 +59,6 @@ void DSString::resize(int newCapacity){
 
     //set a new capacity
     this->capacity = newCapacity + 1;
-
-    //delete old data
-    delete this->data;
 }
 
 int DSString::createLength(const char *newData){
@@ -106,7 +106,23 @@ char *DSString::getData() {
 
 
 DSString DSString::substring(int start, int numChars) {
-    return DSString();
+
+    char *subChars = new char[numChars + 1];
+//    char subChars[numChars + 1];
+
+    int j = 0;
+    for(int i = start; i < numChars + start; ++i){
+        subChars[j] = this->getData()[i];
+        j++;
+    }
+
+    DSString sub(subChars);
+
+    return sub;
+}
+
+char *DSString::c_str() {
+    return this->data;
 }
 
 //Overloaded Operators
@@ -138,21 +154,20 @@ DSString &DSString::operator=(const char *newData) {
 
 DSString &DSString::operator=(const DSString &newString) {
     char * newData = newString.data;
-    int wordLength = createLength(newData);
+//    int wordLength = createLength(newData);
 
+    //set new size
+    this->size = newString.size;
     //set capacity
     this->capacity = this->size + 1;
 
     //resize if necessary
-    if(wordLength > capacity){
-        resize(wordLength);
+    if(newString.size > capacity){
+        resize(newString.size);
     }
 
     //recreate data
-    this-> data = new char[wordLength];
-
-    //set new size
-    this->size = wordLength;
+    this-> data = new char[newString.size];
 
     //copy data into this data
     for(int i = 0; i < this->capacity; i++){
@@ -161,24 +176,27 @@ DSString &DSString::operator=(const DSString &newString) {
     return *this;
 }
 
-DSString DSString::operator+(const DSString &addData) {
-    DSString temp = *this;
-    temp.size = this->getLength();
-    temp.capacity = this->getCap();
+DSString DSString::operator+(const DSString &addString) {
+    DSString copy = *this;
+    copy.size = this->getLength();
+    copy.capacity = this->getCap();
 
     //resize if necessary
-    if(addData.size + temp.getLength() > temp.getCap()){
-        temp.resize(addData.size + temp.getLength());
+    if(addString.size + copy.getLength() > copy.getCap()){
+        copy.resize(addString.size + copy.getLength());
     }
 
     //copy data in data's data
     int j = 0;
-    for(int i = temp.getLength(); i < temp.getCap(); ++i) {
-        temp.data[i] = addData.data[j];
+    for(int i = copy.getLength(); i < copy.getCap(); ++i) {
+        copy.data[i] = addString.data[j];
+        copy.size++;
         ++j;
     }
 
-    return temp;
+    //get rid of null terminator
+    copy.size--;
+    return copy;
 }
 
 std::ostream &operator<<(std::ostream &out, const DSString &outString) {
@@ -205,6 +223,13 @@ bool DSString::operator==(const DSString &compString) {
 bool DSString::operator>(const DSString &compString) {
     return strcmp(this->data, compString.data) > 0;
 }
+
+char &DSString::operator[](const int location) {
+
+    return this->getData()[location];
+}
+
+
 
 
 
