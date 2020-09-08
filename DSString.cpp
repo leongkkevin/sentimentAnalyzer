@@ -204,7 +204,7 @@ std::ostream &operator<<(std::ostream &out, const DSString &outString) {
         return out;
 }
 
-bool DSString::operator==(const char *compString) {
+bool DSString::operator==(const char *compString) const {
     if(strcmp(this->data, compString) < 0 || strcmp(this->data, compString) > 0){
         return false;
     } else if (strcmp(this->data, compString) == 0){
@@ -212,7 +212,7 @@ bool DSString::operator==(const char *compString) {
     }
 }
 
-bool DSString::operator==(const DSString &compString) {
+bool DSString::operator==(const DSString &compString) const{
     if(strcmp(this->data, compString.data) < 0 || strcmp(this->data, compString.data) > 0){
         return false;
     } else if (strcmp(this->data, compString.data) == 0){
@@ -220,7 +220,7 @@ bool DSString::operator==(const DSString &compString) {
     }
 }
 
-bool DSString::operator>(const DSString &compString) {
+bool DSString::operator>(const DSString &compString) const{
     return strcmp(this->data, compString.data) > 0;
 }
 
