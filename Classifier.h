@@ -3,7 +3,6 @@
 //
 #include <iostream>
 #include <fstream>
-//#include <string>
 #include <vector>
 #include <sstream>
 
@@ -15,22 +14,22 @@ using namespace std;
 #define S20_PA01_SENTIMENTANALYSIS_CLASSIFIER_H
 
 void getTop(ifstream &fin){
-    DSString topString;
-    fin.getline(topString.getData(), 200000);
-    //cout << topString << endl;
+    DSString headerString;
+    fin.getline(headerString.getData(), 2000);
 }
 
 void fileParse(ifstream &fin, vector<DSString> &reviewVector) {
-    for (int i = 0; i < 50000; ++i) { //PUT AMOUNT OF REVIEWS THERE!!!!!!!!!!!!!!
-        char tempChar[15000];
-        fin.getline(tempChar, 15000, '\n');
-        DSString tempString = tempChar;
+    for (int i = 0; i < 40000; ++i) {
+        char bufferChar[15000];
+        fin.getline(bufferChar, 15000, '\n');
+        DSString tempString = bufferChar;
         reviewVector.push_back(tempString);
     }
 
-//    char tempChar[15000];
-//    while(fin.getline(tempChar, 15000, '\n')){
-//        DSString tempString = tempChar;
+//parse from the file and seperate each review
+//    char bufferChar[15000];
+//    while(fin.getline(bufferChar, 15000, '\n')){
+//        DSString tempString = bufferChar;
 //        reviewVector.push_back(tempString);
 //    }
 
@@ -39,41 +38,72 @@ void fileParse(ifstream &fin, vector<DSString> &reviewVector) {
 void arrayParse(vector<DSString> &reviewVector, vector<DSString> &ratingVector, vector<DSString> &commentVector){
 
     for(int i = 0; i < reviewVector.size() - 0; i++) {
-        vector<DSString> fullCommentVector;
 
         stringstream ss;
         DSString sentenceString = reviewVector.at(i);
         ss << sentenceString.getData();
 
-        char tempCharArray[15000];
+        vector<DSString> fullCommentVector;
 
+        //for each line, delimit by comma and push it into a vector
+        char tempCharArray[15000];
         while (ss.getline(tempCharArray, 15000, ',')){
             DSString tempString;
             tempString = tempCharArray;
             fullCommentVector.push_back(tempString);
         }
-        //reverse(wordArray.begin(), wordArray.end());
+
+        //push the last value (assumed to be + or -) into the rating vector
         ratingVector.push_back(fullCommentVector[fullCommentVector.size() - 1]);
 
-        //reverse(wordArray.begin(), wordArray.end());
+        //remove the rating
         fullCommentVector.pop_back();
 
         //rebuild the comment
-        char charComment[15000];
+//        char charComment[15000];
+        char *charComment = new char[15000];
+
         for (int j = 0; j < fullCommentVector.size(); ++j) {
             strcat(charComment, fullCommentVector.at(j).getData());
         }
 
+        //push the entire comment into comment vector
         DSString fullComment(charComment);
         commentVector.push_back(fullComment);
 
+        //delete the vector
         fullCommentVector.clear();
 
-        cout << i << endl;
-
     }
-
 }
+
+void classifyComments(vector<DSString> &ratingVector, vector<DSString> &commentVector, vector<DSString> &positiveComments, vector<DSString> &negativeComments){
+
+    for(int i = 0; i < ratingVector.size(); ++i){
+        if(ratingVector.at(i) == "positive"){
+            positiveComments.push_back(commentVector.at(i));
+        } else if(ratingVector.at(i) == "negative"){
+            negativeComments.push_back(commentVector.at(i));
+        }
+    }
+}
+
+void generateWordBank(vector<DSString> &commentVector, vector<DSString> &wordBankVector){
+    for(int i = 0; i < commentVector.size(); ++i){
+        stringstream ss;
+        DSString sentenceString = commentVector.at(i);
+        ss << sentenceString.getData();
+
+        char tempCharArray[15000];
+        while (ss.getline(tempCharArray, 15000, ' ')){
+            DSString tempString;
+            tempString = tempCharArray;
+            wordBankVector.push_back(tempString);
+        }
+    }
+    
+}
+
 
 //class Classifier {
 //public:

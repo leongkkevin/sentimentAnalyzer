@@ -69,15 +69,11 @@ REQUIRE((s[8].getLength() == 26));
 REQUIRE((s[3].getLength() == 27));
 }
 
-//if((s[4].substring(1, 3) == "his")){
-//    cout << "YEA" << endl;
-//}
 
-cout << s[4].substring(1, 3);
 SECTION("Substring function"){
-//REQUIRE((s[0].substring(0, 5) == "testS"));
-//REQUIRE((s[4].substring(0, 4) == "this"));
-//REQUIRE((s[4].substring(1, 3) == "his"));
+REQUIRE((s[0].substring(0, 5) == "testS"));
+REQUIRE((s[4].substring(0, 4) == "this"));
+REQUIRE((s[4].substring(1, 3) == "his"));
 }
 
 SECTION("c_str function"){

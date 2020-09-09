@@ -13,9 +13,9 @@ int main(int argc, char* argv[]) {
     ifstream fin;
     fin.open("IMDB.csv");
 
+    //gets header
     getTop(fin);
 
-    //string reviewVector[10];
     vector<DSString> reviewVector;
     vector<DSString> ratingVector;
     vector<DSString> commentVector;
@@ -24,6 +24,14 @@ int main(int argc, char* argv[]) {
 
     arrayParse(reviewVector, ratingVector, commentVector);
 
+    vector<DSString> positiveComments;
+    vector<DSString> negativeComments;
+    classifyComments(ratingVector, commentVector, positiveComments, negativeComments);
+
+    vector<DSString> positiveWordVector;
+    vector<DSString> negativeWordVector;
+    generateWordBank(positiveComments, positiveWordVector);
+    generateWordBank(negativeComments, negativeWordVector);
 
     return 0;
 }

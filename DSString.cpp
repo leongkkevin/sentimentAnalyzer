@@ -46,8 +46,10 @@ void DSString::resize(int newCapacity){
         temp[i] = data[i];
     }
 
-    //delete old data
-    delete this->data;
+//    delete old data
+    if(this->size != 0) {
+        delete this->data;
+    }
 
     //new data with new capacity;
     this->data = new char[newCapacity + 1];
@@ -63,9 +65,7 @@ void DSString::resize(int newCapacity){
 
 int DSString::createLength(const char *newData){
     int wordLength = strlen(newData);;
-//    while(newData[wordLength] != '\0'){
-//        wordLength++;
-//    }
+
     return wordLength;
 }
 
@@ -108,7 +108,7 @@ char *DSString::getData() {
 DSString DSString::substring(int start, int numChars) {
 
     char *subChars = new char[numChars + 1];
-//    char subChars[numChars + 1];
+    subChars[numChars] = '\0';
 
     int j = 0;
     for(int i = start; i < numChars + start; ++i){
@@ -130,31 +130,27 @@ char *DSString::c_str() {
 DSString &DSString::operator=(const char *newData) {
     int wordLength = createLength(newData);
 
-    //set capacity
-    this->capacity = this->size + 1;
-
     //resize if necessary
-    if(wordLength > capacity){
+    if(wordLength > this->capacity){
         resize(wordLength);
     }
 
-    //recreate data
-    this-> data = new char[wordLength];
-
     //set new size
     this->size = wordLength;
+
+    //recreate data
+    this-> data = new char[this->capacity];
 
     //copy data into this data
     for(int i = 0; i < this->capacity; i++){
         this->data[i] = newData[i];
     }
+    this->data[capacity - 1] = '\0';
 
     return *this;
 }
 
 DSString &DSString::operator=(const DSString &newString) {
-    char * newData = newString.data;
-//    int wordLength = createLength(newData);
 
     //set new size
     this->size = newString.size;
@@ -171,7 +167,7 @@ DSString &DSString::operator=(const DSString &newString) {
 
     //copy data into this data
     for(int i = 0; i < this->capacity; i++){
-        this->data[i] = newData[i];
+        this->data[i] = newString.data[i];
     }
     return *this;
 }
