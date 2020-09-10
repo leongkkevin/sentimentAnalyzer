@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 
 
     ifstream fin;
-    fin.open("IMDB.csv");
+    fin.open("../IMDB.csv");
 
     //gets header
     getTop(fin);
@@ -28,10 +28,13 @@ int main(int argc, char* argv[]) {
     vector<DSString> negativeComments;
     classifyComments(ratingVector, commentVector, positiveComments, negativeComments);
 
+    ifstream inFile;
+    inFile.open("../neutralWords.txt");
+
     vector<DSString> positiveWordVector;
     vector<DSString> negativeWordVector;
-    generateWordBank(positiveComments, positiveWordVector);
-    generateWordBank(negativeComments, negativeWordVector);
+    generateWordBank(inFile, positiveComments, positiveWordVector);
+    generateWordBank(inFile,negativeComments, negativeWordVector);
 
     return 0;
 }

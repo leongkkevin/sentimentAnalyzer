@@ -13,6 +13,8 @@ using namespace std;
 #ifndef S20_PA01_SENTIMENTANALYSIS_CLASSIFIER_H
 #define S20_PA01_SENTIMENTANALYSIS_CLASSIFIER_H
 
+void checkDuplicate(vector<DSString> &vector, DSString dsString);
+
 void getTop(ifstream &fin){
     DSString headerString;
     fin.getline(headerString.getData(), 2000);
@@ -88,7 +90,46 @@ void classifyComments(vector<DSString> &ratingVector, vector<DSString> &commentV
     }
 }
 
-void generateWordBank(vector<DSString> &commentVector, vector<DSString> &wordBankVector){
+DSString onlyAlpha(DSString tempString){
+    vector<char> tempWordVect;
+    for(int i = 0; i < tempString.getLength(); ++i) {
+        char checkAlpha = tempString.getData()[i];
+
+        checkAlpha = tolower(checkAlpha);
+
+        if(isalpha(checkAlpha)){
+            tempWordVect.push_back(checkAlpha);
+        }
+    }
+
+    char returnChar[tempWordVect.size()+1];
+    for(int i = 0; i < tempWordVect.size(); ++i){
+        returnChar[i] = tempWordVect.at(i);
+    }
+
+    DSString nonAlphaWord(returnChar);
+
+    return nonAlphaWord;
+
+}
+
+bool checkNeutralWords(const DSString& checkString){
+
+    bool returnBool = false;
+    DSString neutralWord;
+
+    while(inFile.getline(neutralWord.getData(), 100, '\n')){
+
+        if(checkString == neutralWord){
+            returnBool = true;
+        }
+    }
+
+    return returnBool;
+
+}
+
+void generateWordBank(ifstream &fin, vector<DSString> &commentVector, vector<DSString> &wordBankVector){
     for(int i = 0; i < commentVector.size(); ++i){
         stringstream ss;
         DSString sentenceString = commentVector.at(i);
@@ -98,15 +139,18 @@ void generateWordBank(vector<DSString> &commentVector, vector<DSString> &wordBan
         while (ss.getline(tempCharArray, 15000, ' ')){
             DSString tempString;
             tempString = tempCharArray;
-            wordBankVector.push_back(tempString);
+
+            tempString = onlyAlpha(tempString);
+
+            if(!checkNeutralWords(tempString)){
+                wordBankVector.push_back(tempString);
+            }
         }
     }
     
 }
-
-
 //class Classifier {
-//public:
+//public
 //
 //    };
 

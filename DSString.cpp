@@ -220,6 +220,10 @@ bool DSString::operator>(const DSString &compString) const{
     return strcmp(this->data, compString.data) > 0;
 }
 
+bool DSString::operator<(const DSString &compString) const{
+    return strcmp(this->data, compString.data) < 0;
+}
+
 char &DSString::operator[](const int location) {
 
     return this->getData()[location];

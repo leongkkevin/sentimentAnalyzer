@@ -12,7 +12,7 @@ set (EXE_NAME SentimentAnalyzer)
 # etc....
 
 set (input01 "IMDB.csv")
-set (input02 "")
+set (input02 "neutralWords.txt")
 set (input03 "")
 set (input04 "")
 
