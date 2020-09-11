@@ -62,12 +62,13 @@ void DSString::resize(int newCapacity){
 
     //set a new capacity
     this->capacity = newCapacity + 1;
+
+    //new null terminator
+    this->data[capacity - 1] = '\0';
 }
 
 int DSString::createLength(const char *newData){
-    int wordLength = strlen(newData);;
-
-    return wordLength;
+    return strlen(newData);
 }
 
 int DSString::getLength() {
@@ -106,6 +107,7 @@ void DSString::append(char addData){
     resize(this->size + 1);
 
     this->data[this->size] = addData;
+    this->data[this->capacity - 1] = '\0';
 
     //change size
     this->size = this->capacity - 1;
@@ -204,8 +206,9 @@ DSString DSString::operator+(const DSString &addString) {
         copy.size++;
         ++j;
     }
+    copy.data[copy.getCap() - 1] = '\0';
 
-    //get rid of null terminator
+    //get rid of null terminator count
     copy.size--;
     return copy;
 }
