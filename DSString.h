@@ -69,7 +69,7 @@ public:
     /**
      * getLength() returns the number (count) of characters in the string.
      **/
-    int getLength();
+    int getLength() const;
     int getCap();
     char* getData();
     void setInfo();

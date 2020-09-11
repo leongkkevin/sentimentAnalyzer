@@ -16,10 +16,10 @@ DSString::DSString(const char *newData) {
     this->size = createLength(newData);
     this->capacity = this->size + 1;
     this->data = new char[this->capacity];
-//    for(int i = 0; i < this->capacity; i++){
-//        this->data[i] = newData[i];
-//    }
-    strcpy(this->data, newData);
+    for(int i = 0; i < this->capacity; i++){
+        this->data[i] = newData[i];
+    }
+    //strcpy(this->data, newData);
     data[capacity - 1] = '\0';
 }
 
@@ -71,7 +71,7 @@ int DSString::createLength(const char *newData){
     return strlen(newData);
 }
 
-int DSString::getLength() {
+int DSString::getLength() const {
     return this->size;
 }
 int DSString::getCap() {
@@ -144,7 +144,7 @@ DSString &DSString::operator=(const char *newData) {
     int wordLength = createLength(newData);
 
     //resize if necessary
-    if(wordLength > this->capacity){
+    if(wordLength >= this->capacity){
         resize(wordLength);
     }
 
@@ -214,7 +214,9 @@ DSString DSString::operator+(const DSString &addString) {
 }
 
 std::ostream &operator<<(std::ostream &out, const DSString &outString) {
-        out << outString.data;
+        for(int i = 0; i < outString.getLength(); ++i){
+            out << outString.data[i];
+        }
         return out;
 }
 
@@ -251,6 +253,7 @@ char &DSString::operator[](const int location) {
 
     return this->getData()[location];
 }
+
 
 
 

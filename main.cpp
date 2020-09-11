@@ -1,36 +1,35 @@
 //Kevin Leong 47970316
+//../IMDB.csv ../neutralWords.txt
+
+#define CATCH_CONFIG_RUNNER
+#include "catch.hpp"
+
 
 #include <iostream>
 
 #include "Classifier.h"
+
+#define TEST false
+int runCatchTest(int argc, char* const argv[]){
+    return Catch::Session().run(argc, argv);
+}
 
 using namespace std;
 
 
 int main(int argc, char* argv[]) {
 
+    if(TEST){
+        return runCatchTest(argc, argv);
+    }
+
     ifstream fin;
-    fin.open("../IMDB.csv");
+    fin.open(argv[1]);
+    ifstream inFile;
+    inFile.open(argv[2]);
 
-    //gets header
-    getTop(fin);
+    run(fin, inFile);
 
-    vector<DSString> reviewVector;
-    vector<DSString> ratingVector;
-    vector<DSString> commentVector;
-
-    fileParse(fin, reviewVector);
-
-    arrayParse(reviewVector, ratingVector, commentVector);
-
-    vector<DSString> positiveComments;
-    vector<DSString> negativeComments;
-    classifyComments(ratingVector, commentVector, positiveComments, negativeComments);
-
-    vector<DSString> positiveWordVector;
-    vector<DSString> negativeWordVector;
-    generateWordBank(positiveComments, positiveWordVector);
-    generateWordBank(negativeComments, negativeWordVector);
 
     return 0;
 }

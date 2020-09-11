@@ -1,4 +1,5 @@
-//From NLTK's List of English stop words (self-alphabetized); Found at: https://gist.github.com/sebleier/554280#file-nltk-s-list-of-english-stopwords
+From NLTK's List of English stop words (self-alphabetized); Found at: https://gist.github.com/sebleier/554280#file-nltk-s-list-of-english-stopwords
+
 a
 about
 above
@@ -22,6 +23,7 @@ below
 between
 both
 but
+br
 by
 can
 did

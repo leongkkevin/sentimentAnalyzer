@@ -1,4 +1,4 @@
-#define CATCH_CONFIG_MAIN
+//#define CATCH_CONFIG_MAIN
 
 #include <iostream>
 #include <cstring>
@@ -56,6 +56,13 @@ REQUIRE((s[9] > s[6]));
 REQUIRE((s[7] > s[6]));
 }
 
+SECTION("Less than operator"){
+REQUIRE((s[1] < s[0]));
+REQUIRE((s[3] < s[4]));
+REQUIRE((s[6] < s[9]));
+REQUIRE((s[6] < s[7]));
+}
+
 SECTION("[] Operator"){
 REQUIRE((s[0][1] == 'e'));
 REQUIRE((s[4][4] == ' '));
@@ -81,5 +88,40 @@ REQUIRE((strcmp(s[0].c_str(), "testString") == 0));
 REQUIRE((strcmp(s[9].c_str(), s[0].c_str()) == 0));
 REQUIRE((strcmp(s[2].c_str(), "") == 0));
 }
+
+SECTION("Copy Constructor"){
+REQUIRE((DSString(s[0]) == "testString"));
+REQUIRE((DSString(s[1]) == "a test string"));
+REQUIRE((DSString(s[2]) == ""));
+REQUIRE((DSString(s[8]) == "                          "));
+REQUIRE((DSString(s[0].getData()) == "testString"));
+REQUIRE((DSString(s[1].getData()) == "a test string"));
+
+SECTION("Vector"){
+vector<DSString> testVect;
+testVect.push_back(s[0]);
+testVect.push_back(s[1]);
+testVect.push_back(s[2]);
+
+REQUIRE((testVect.size() == 3));
+REQUIRE((testVect[0] == s[0]));
+REQUIRE((testVect[1] == s[1]));
+REQUIRE((testVect[2] == s[2]));
+
+testVect.push_back(DSString(s[0]));
+REQUIRE((testVect[3] == s[0]));
+REQUIRE((testVect[3] == testVect[0]));
+REQUIRE((testVect[3] == s[0].getData()));
+
+testVect.push_back(DSString(s[1].getData()));
+REQUIRE((testVect[4] == s[1]));
+REQUIRE((testVect[4] == testVect[1]));
+REQUIRE((testVect[4] == s[1].getData()));
+
+}
+
+
+}
+
 
 }
