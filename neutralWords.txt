@@ -1,6 +1,4 @@
-//From NLTK's List of English stop words
-//https://gist.github.com/sebleier/554280#file-nltk-s-list-of-english-stopwords
-//self-alphabetized
+//From NLTK's List of English stop words (self-alphabetized); Found at: https://gist.github.com/sebleier/554280#file-nltk-s-list-of-english-stopwords
 a
 about
 above
@@ -72,6 +70,7 @@ now
 of
 off
 on
+one
 once
 only
 or

@@ -107,7 +107,8 @@ public:
 
     int createLength(const char *newData);
 
-    void append(const DSString &addData);
+    //void append(const DSString &addData);
+    void append(char addData);
 
 };
 

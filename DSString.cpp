@@ -16,10 +16,10 @@ DSString::DSString(const char *newData) {
     this->size = createLength(newData);
     this->capacity = this->size + 1;
     this->data = new char[this->capacity];
-    for(int i = 0; i < this->capacity; i++){
-        this->data[i] = newData[i];
-    }
-
+//    for(int i = 0; i < this->capacity; i++){
+//        this->data[i] = newData[i];
+//    }
+    strcpy(this->data, newData);
     data[capacity - 1] = '\0';
 }
 
@@ -27,9 +27,10 @@ DSString::DSString(const DSString &copyString) {
     this->size = copyString.size;
     this->capacity = copyString.capacity;
     this->data = new char[this->capacity];
-    for(int i = 0; i < this->capacity; i++){
-        this->data[i] = copyString.data[i];
-    }
+//    for(int i = 0; i < this->capacity; i++){
+//        this->data[i] = copyString.data[i];
+//    }
+    strcpy(this->data, copyString.data);
     data[capacity - 1] = '\0';
 }
 
@@ -81,20 +82,30 @@ void DSString::setInfo(){
     this->capacity = this->size + 1;
 }
 
-void DSString::append(const DSString &addData){
+//void DSString::append(const DSString &addData){
+//
+//    strcat(this->data, addData.data);
+//    //resize if necessary
+//    if(addData.size + this->size > this-> capacity){
+//        resize(addData.size + this->size);
+//    }
+//
+//    //copy data in data's data
+//    int j = 0;
+//    for(int i = this->size; i < this->capacity; ++i) {
+//        this->data[i] = addData.data[j];
+//        ++j;
+//    }
+//
+//    //change size
+//    this->size = this->capacity - 1;
+//}
 
-    strcat(this->data, addData.data);
-    //resize if necessary
-    if(addData.size + this->size > this-> capacity){
-        resize(addData.size + this->size);
-    }
+void DSString::append(char addData){
 
-    //copy data in data's data
-    int j = 0;
-    for(int i = this->size; i < this->capacity; ++i) {
-        this->data[i] = addData.data[j];
-        ++j;
-    }
+    resize(this->size + 1);
+
+    this->data[this->size] = addData;
 
     //change size
     this->size = this->capacity - 1;
@@ -142,33 +153,37 @@ DSString &DSString::operator=(const char *newData) {
     this-> data = new char[this->capacity];
 
     //copy data into this data
-    for(int i = 0; i < this->capacity; i++){
-        this->data[i] = newData[i];
-    }
+//    for(int i = 0; i < this->capacity; i++){
+//        this->data[i] = newData[i];
+//    }
+    strcpy(this->data, newData);
     this->data[capacity - 1] = '\0';
 
     return *this;
 }
 
-DSString &DSString::operator=(const DSString &newString) {
+DSString &DSString::operator=(const DSString &sourceString) {
 
     //set new size
-    this->size = newString.size;
+    this->size = sourceString.size;
     //set capacity
     this->capacity = this->size + 1;
 
     //resize if necessary
-    if(newString.size > capacity){
-        resize(newString.size);
+    if(sourceString.size > capacity){
+        resize(sourceString.size);
     }
 
     //recreate data
-    this-> data = new char[newString.size];
+    this-> data = new char[sourceString.capacity];
 
     //copy data into this data
-    for(int i = 0; i < this->capacity; i++){
-        this->data[i] = newString.data[i];
-    }
+//    for(int i = 0; i < this->capacity; i++){
+//        this->data[i] = newString.data[i];
+//    }
+    strcpy(this->data, sourceString.data);
+    this->data[capacity - 1] = '\0';
+
     return *this;
 }
 
@@ -201,19 +216,24 @@ std::ostream &operator<<(std::ostream &out, const DSString &outString) {
 }
 
 bool DSString::operator==(const char *compString) const {
+    bool returnBool = false;
     if(strcmp(this->data, compString) < 0 || strcmp(this->data, compString) > 0){
-        return false;
+        returnBool = false;
     } else if (strcmp(this->data, compString) == 0){
-        return true;
+        returnBool = true;
     }
+    return returnBool;
 }
 
 bool DSString::operator==(const DSString &compString) const{
+    bool returnBool = false;
     if(strcmp(this->data, compString.data) < 0 || strcmp(this->data, compString.data) > 0){
-        return false;
+        returnBool = false;
     } else if (strcmp(this->data, compString.data) == 0){
-        return true;
+        returnBool = true;
     }
+    
+    return returnBool;
 }
 
 bool DSString::operator>(const DSString &compString) const{
@@ -228,7 +248,6 @@ char &DSString::operator[](const int location) {
 
     return this->getData()[location];
 }
-
 
 
 

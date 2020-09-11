@@ -9,7 +9,6 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-
     ifstream fin;
     fin.open("../IMDB.csv");
 
@@ -28,13 +27,10 @@ int main(int argc, char* argv[]) {
     vector<DSString> negativeComments;
     classifyComments(ratingVector, commentVector, positiveComments, negativeComments);
 
-    ifstream inFile;
-    inFile.open("../neutralWords.txt");
-
     vector<DSString> positiveWordVector;
     vector<DSString> negativeWordVector;
-    generateWordBank(inFile, positiveComments, positiveWordVector);
-    generateWordBank(inFile,negativeComments, negativeWordVector);
+    generateWordBank(positiveComments, positiveWordVector);
+    generateWordBank(negativeComments, negativeWordVector);
 
     return 0;
 }

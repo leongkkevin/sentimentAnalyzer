@@ -39,10 +39,11 @@ void fileParse(ifstream &fin, vector<DSString> &reviewVector) {
 
 void arrayParse(vector<DSString> &reviewVector, vector<DSString> &ratingVector, vector<DSString> &commentVector){
 
-    for(int i = 0; i < reviewVector.size() - 0; i++) {
+    for(int i = 0; i < reviewVector.size(); i++) {
 
         stringstream ss;
-        DSString sentenceString = reviewVector.at(i);
+        //DSString sentenceString = reviewVector.at(i);
+        DSString sentenceString(reviewVector.at(i));
         ss << sentenceString.getData();
 
         vector<DSString> fullCommentVector;
@@ -50,8 +51,9 @@ void arrayParse(vector<DSString> &reviewVector, vector<DSString> &ratingVector, 
         //for each line, delimit by comma and push it into a vector
         char tempCharArray[15000];
         while (ss.getline(tempCharArray, 15000, ',')){
-            DSString tempString;
-            tempString = tempCharArray;
+//            DSString tempString;
+//            tempString = tempCharArray;
+            DSString tempString(tempCharArray);
             fullCommentVector.push_back(tempString);
         }
 
@@ -64,7 +66,6 @@ void arrayParse(vector<DSString> &reviewVector, vector<DSString> &ratingVector, 
         //rebuild the comment
 //        char charComment[15000];
         char *charComment = new char[15000];
-
         for (int j = 0; j < fullCommentVector.size(); ++j) {
             strcat(charComment, fullCommentVector.at(j).getData());
         }
@@ -93,7 +94,7 @@ void classifyComments(vector<DSString> &ratingVector, vector<DSString> &commentV
 DSString onlyAlpha(DSString tempString){
     vector<char> tempWordVect;
     for(int i = 0; i < tempString.getLength(); ++i) {
-        char checkAlpha = tempString.getData()[i];
+        char checkAlpha = tempString[i];
 
         checkAlpha = tolower(checkAlpha);
 
@@ -102,26 +103,50 @@ DSString onlyAlpha(DSString tempString){
         }
     }
 
-    char returnChar[tempWordVect.size()+1];
+    DSString nonAlphaWord;
+    //char *returnChar = new char[tempWordVect.size()+1];
     for(int i = 0; i < tempWordVect.size(); ++i){
-        returnChar[i] = tempWordVect.at(i);
+        //nonAlphaWord().getData()[i] = tempWordVect.at(i);
+        nonAlphaWord.append(tempWordVect.at(i));
     }
+    //returnChar[tempWordVect.size() + 1] = '\0';
 
-    DSString nonAlphaWord(returnChar);
+    //DSString nonAlphaWord(returnChar);
 
     return nonAlphaWord;
 
 }
 
-bool checkNeutralWords(const DSString& checkString){
+DSString onlyAlpha(const char* tempString){
+    vector<char> tempWordVect;
+    for(int i = 0; i < sizeof(tempString); ++i) {
+        char checkAlpha = tempString[i];
+
+        checkAlpha = tolower(checkAlpha);
+
+        if(isalpha(checkAlpha)){
+            tempWordVect.push_back(checkAlpha);
+        }
+    }
+
+    DSString nonAlphaWord;
+    for(int i = 0; i < tempWordVect.size(); ++i){
+        nonAlphaWord.append(tempWordVect.at(i));
+    }
+
+    return nonAlphaWord;
+
+}
+
+bool checkNeutralWords(const DSString& checkString, ifstream &inFile){
 
     bool returnBool = false;
     DSString neutralWord;
 
     while(inFile.getline(neutralWord.getData(), 100, '\n')){
-
         if(checkString == neutralWord){
             returnBool = true;
+            break;
         }
     }
 
@@ -129,21 +154,23 @@ bool checkNeutralWords(const DSString& checkString){
 
 }
 
-void generateWordBank(ifstream &fin, vector<DSString> &commentVector, vector<DSString> &wordBankVector){
+void generateWordBank(vector<DSString> &commentVector, vector<DSString> &wordBankVector){
     for(int i = 0; i < commentVector.size(); ++i){
         stringstream ss;
         DSString sentenceString = commentVector.at(i);
         ss << sentenceString.getData();
 
-        char tempCharArray[15000];
-        while (ss.getline(tempCharArray, 15000, ' ')){
-            DSString tempString;
-            tempString = tempCharArray;
+        char tempCharArray[150];
+        while (ss.getline(tempCharArray, 150, ' ')){
+            DSString tempString(tempCharArray);
+            DSString onlyAlphaString = onlyAlpha(tempString);
 
-            tempString = onlyAlpha(tempString);
+            ifstream inFile;
+            inFile.open("../neutralWords.txt");
+            //getTop(inFile);
 
-            if(!checkNeutralWords(tempString)){
-                wordBankVector.push_back(tempString);
+            if(!checkNeutralWords(onlyAlphaString, inFile)){
+                wordBankVector.push_back(onlyAlphaString);
             }
         }
     }
