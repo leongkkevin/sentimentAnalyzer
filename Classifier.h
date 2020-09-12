@@ -21,19 +21,13 @@ void getTop(ifstream &fin){
     DSString headerString(tempString);
 }
 
-void fileParse(ifstream &fin, vector<DSString> &reviewVector) {
-    for (int i = 0; i < 40000; ++i) {
+void fileParse(ifstream &fin, vector<DSString> &reviewVector, int size) {
+    for (int i = 0; i < size; ++i) {
         char bufferChar[15000];
         fin.getline(bufferChar, 15000, '\n');
         DSString tempString = bufferChar;
         reviewVector.push_back(tempString);
     }
-//parse from the file and seperate each review
-//    char bufferChar[15000];
-//    while(fin.getline(bufferChar, 15000, '\n')){
-//        DSString tempString = bufferChar;
-//        reviewVector.push_back(tempString);
-//    }
 
 }
 
@@ -63,7 +57,6 @@ void arrayParse(vector<DSString> &reviewVector, vector<DSString> &ratingVector, 
 
         //rebuild the comment
         DSString fullComment = reviewVector.at(i).substring(0, reviewVector.at(i).getLength() - 9);
-//        cout << fullComment << endl;
         commentVector.push_back(fullComment);
 
         //clear the vector
@@ -96,32 +89,6 @@ DSString onlyAlpha(DSString tempString){
     }
 
     DSString nonAlphaWord;
-    //char *returnChar = new char[tempWordVect.size()+1];
-    for(int i = 0; i < tempWordVect.size(); ++i){
-        //nonAlphaWord().getData()[i] = tempWordVect.at(i);
-        nonAlphaWord.append(tempWordVect.at(i));
-    }
-    //returnChar[tempWordVect.size() + 1] = '\0';
-
-    //DSString nonAlphaWord(returnChar);
-
-    return nonAlphaWord;
-
-}
-
-DSString onlyAlpha(const char* tempString){
-    vector<char> tempWordVect;
-    for(int i = 0; i < sizeof(tempString); ++i) {
-        char checkAlpha = tempString[i];
-
-        checkAlpha = tolower(checkAlpha);
-
-        if(isalpha(checkAlpha)){
-            tempWordVect.push_back(checkAlpha);
-        }
-    }
-
-    DSString nonAlphaWord;
     for(int i = 0; i < tempWordVect.size(); ++i){
         nonAlphaWord.append(tempWordVect.at(i));
     }
@@ -140,14 +107,16 @@ void generateNeutralWordBank(ifstream &inFile, set<DSString> &neutralDSSet){
         neutralDSSet.insert(tempString);
     }
 
-//    for (DSString const& string : neutralDSSet)
-//    {
-//        std::cout << string << endl;
-//    }
-
 }
 
-void makeSpecWordBank(vector<DSString> &commentVector, const set<DSString>& neutralDSSet, vector<DSString> &wordBankVector, map<DSString, int> &wordBank, int points){
+void makeSpecWordBank(
+        vector<DSString> &commentVector,
+        const set<DSString>& neutralDSSet,
+        vector<DSString> wordBankVector,
+        map<DSString,
+        int> &wordBank,
+        int points){
+
     for(int i = 0; i < commentVector.size(); ++i){
         stringstream ss;
         DSString sentenceString = commentVector.at(i);
@@ -186,12 +155,71 @@ void generateWordBank(
 
     makeSpecWordBank(positiveCommentVector, neutralDSSet, wordBankVector, wordBank, 1);
     makeSpecWordBank(negativeCommentVector, neutralDSSet, wordBankVector, wordBank, -1);
+}
 
+void analyzeSentiment(vector<DSString> &testCommentVector, vector<DSString> &predictedRatingVector, map<DSString,int> &wordBank){
+
+    for(int i = 0; i < testCommentVector.size(); ++i){
+        int totalCommentPoint = 0;
+
+        DSString sentenceString = testCommentVector.at(i);
+        stringstream ss;
+        ss << sentenceString;
+
+        char tempCharWordArray[15000];
+        while (ss.getline(tempCharWordArray, 15000, ' ')){
+            DSString tempString(tempCharWordArray);
+            DSString onlyAlphaString = onlyAlpha(tempString);
+
+            if(wordBank.count(onlyAlphaString) != 0){
+                totalCommentPoint += wordBank[onlyAlphaString];
+            }
+        }
+
+        if(totalCommentPoint > 0){
+            predictedRatingVector.push_back(DSString("positive"));
+        } else if(totalCommentPoint < 0){
+            predictedRatingVector.push_back(DSString("negative"));
+        }
+
+    }
 
 }
 
+float findAccuracy(vector<DSString> testRatingVector, vector<DSString> predictedRatingVector, vector<int> &wrongReviewNumbers){
+    float correct = 0;
 
+    for(int i = 0; i < predictedRatingVector.size(); ++i){
+        if(testRatingVector.at(i) == predictedRatingVector.at(i)){
+            correct++;
+        } else {
+            wrongReviewNumbers.push_back(40000 + i);
+        }
+    }
 
+    return correct/testRatingVector.size();
+}
+
+void classifyTestComments(ifstream &fin, map<DSString,int> &wordBank){
+    vector<DSString> testReviewVector;
+    fileParse(fin, testReviewVector, 10000);
+
+    vector<DSString> testRatingVector;
+    vector<DSString> testCommentVector;
+    vector<DSString> predictedRatingVector;
+    arrayParse(testReviewVector, testRatingVector, testCommentVector);
+
+    analyzeSentiment(testCommentVector, predictedRatingVector, wordBank);
+
+    vector<int> wrongReviewNumbers;
+    float accuracy = findAccuracy(testRatingVector, predictedRatingVector, wrongReviewNumbers);
+
+    ofstream outFile("output01.txt");
+    outFile << accuracy << endl;
+    for(int i = 0; i < wrongReviewNumbers.size(); ++i){
+        outFile << wrongReviewNumbers.at(i) << endl;
+    }
+}
 
 
 //runs the program
@@ -204,7 +232,7 @@ void run(ifstream &fin, ifstream &inFile){
     vector<DSString> ratingVector;
     vector<DSString> commentVector;
 
-    fileParse(fin, reviewVector);
+    fileParse(fin, reviewVector, 40000);
 
     arrayParse(reviewVector, ratingVector, commentVector);
 
@@ -213,17 +241,14 @@ void run(ifstream &fin, ifstream &inFile){
     classifyComments(ratingVector, commentVector, positiveComments, negativeComments);
 
     getTop(inFile);
-    vector<DSString> WordBankVector;
-    map<DSString, int> WordBank;
-    generateWordBank(inFile, positiveComments, negativeComments, WordBankVector, WordBank);
+    vector<DSString> wordBankVector;
+    map<DSString, int> wordBank;
+    generateWordBank(inFile, positiveComments, negativeComments, wordBankVector, wordBank);
+
+    classifyTestComments(fin, wordBank);
 
 }
 
-
-//class Classifier {
-//public
-//
-//    };
 
 
 
