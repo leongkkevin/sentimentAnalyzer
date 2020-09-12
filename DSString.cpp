@@ -19,7 +19,6 @@ DSString::DSString(const char *newData) {
     for(int i = 0; i < this->capacity; i++){
         this->data[i] = newData[i];
     }
-    //strcpy(this->data, newData);
     data[capacity - 1] = '\0';
 }
 
@@ -27,115 +26,12 @@ DSString::DSString(const DSString &copyString) {
     this->size = copyString.size;
     this->capacity = copyString.capacity;
     this->data = new char[this->capacity];
-//    for(int i = 0; i < this->capacity; i++){
-//        this->data[i] = copyString.data[i];
-//    }
     strcpy(this->data, copyString.data);
     data[capacity - 1] = '\0';
 }
 
 DSString::~DSString() {
     delete[] data;
-}
-
-//Assorted Functions
-
-void DSString::resize(int newCapacity){
-    //copy the data from initial data
-    char temp[capacity];
-    for(int i = 0; i < capacity; i++){
-        temp[i] = data[i];
-    }
-
-//    delete old data
-    if(this->size != 0) {
-        delete this->data;
-    }
-
-    //new data with new capacity;
-    this->data = new char[newCapacity + 1];
-
-    //set the new data with temp copy
-    for(int i = 0; i < this->size; i++){
-        this->data[i] = temp[i];
-    }
-
-    //set a new capacity
-    this->capacity = newCapacity + 1;
-
-    //new null terminator
-    this->data[capacity - 1] = '\0';
-}
-
-int DSString::createLength(const char *newData){
-    return strlen(newData);
-}
-
-int DSString::getLength() const {
-    return this->size;
-}
-int DSString::getCap() {
-    return this->capacity;
-}
-
-void DSString::setInfo(){
-    this->size = createLength(this->data);
-    this->capacity = this->size + 1;
-}
-
-//void DSString::append(const DSString &addData){
-//
-//    strcat(this->data, addData.data);
-//    //resize if necessary
-//    if(addData.size + this->size > this-> capacity){
-//        resize(addData.size + this->size);
-//    }
-//
-//    //copy data in data's data
-//    int j = 0;
-//    for(int i = this->size; i < this->capacity; ++i) {
-//        this->data[i] = addData.data[j];
-//        ++j;
-//    }
-//
-//    //change size
-//    this->size = this->capacity - 1;
-//}
-
-void DSString::append(char addData){
-
-    resize(this->size + 1);
-
-    this->data[this->size] = addData;
-    this->data[this->capacity - 1] = '\0';
-
-    //change size
-    this->size = this->capacity - 1;
-}
-
-char *DSString::getData() {
-    return this->data;
-}
-
-
-DSString DSString::substring(int start, int numChars) {
-
-    char *subChars = new char[numChars + 1];
-    subChars[numChars] = '\0';
-
-    int j = 0;
-    for(int i = start; i < numChars + start; ++i){
-        subChars[j] = this->getData()[i];
-        j++;
-    }
-
-    DSString sub(subChars);
-
-    return sub;
-}
-
-char *DSString::c_str() {
-    return this->data;
 }
 
 //Overloaded Operators
@@ -155,9 +51,6 @@ DSString &DSString::operator=(const char *newData) {
     this-> data = new char[this->capacity];
 
     //copy data into this data
-//    for(int i = 0; i < this->capacity; i++){
-//        this->data[i] = newData[i];
-//    }
     strcpy(this->data, newData);
     this->data[capacity - 1] = '\0';
 
@@ -180,9 +73,6 @@ DSString &DSString::operator=(const DSString &sourceString) {
     this-> data = new char[sourceString.capacity];
 
     //copy data into this data
-//    for(int i = 0; i < this->capacity; i++){
-//        this->data[i] = newString.data[i];
-//    }
     strcpy(this->data, sourceString.data);
     this->data[capacity - 1] = '\0';
 
@@ -255,8 +145,80 @@ char &DSString::operator[](const int location) {
 }
 
 
+//Assorted Functions
 
+void DSString::resize(int newLength){
+    //copy the data from initial data
+    char temp[capacity];
+    for(int i = 0; i < capacity; i++){
+        temp[i] = data[i];
+    }
 
+//    delete old data
+    if(this->size != 0) {
+        delete this->data;
+    }
 
+    //new data with new capacity;
+    this->data = new char[newLength + 1];
+
+    //set the new data with temp copy
+    for(int i = 0; i < this->size; i++){
+        this->data[i] = temp[i];
+    }
+
+    //set a new capacity
+    this->capacity = newLength + 1;
+
+    //new null terminator
+    this->data[capacity - 1] = '\0';
+}
+
+int DSString::createLength(const char *newData){
+    return strlen(newData);
+}
+
+int DSString::getLength() const {
+    return this->size;
+}
+int DSString::getCap() {
+    return this->capacity;
+}
+
+char *DSString::getData() {
+    return this->data;
+}
+
+void DSString::append(char addData){
+
+    resize(this->size + 1);
+
+    this->data[this->size] = addData;
+    this->data[this->capacity - 1] = '\0';
+
+    //change size
+    this->size = this->capacity - 1;
+}
+
+//returns a part of the DSString (from start and numChars characters down)
+DSString DSString::substring(int start, int numChars) {
+
+    char *subChars = new char[numChars + 1];
+    subChars[numChars] = '\0';
+
+    int j = 0;
+    for(int i = start; i < numChars + start; ++i){
+        subChars[j] = this->getData()[i];
+        j++;
+    }
+
+    DSString sub(subChars);
+
+    return sub;
+}
+
+char *DSString::c_str() {
+    return this->data;
+}
 
 

@@ -96,6 +96,7 @@ REQUIRE((DSString(s[2]) == ""));
 REQUIRE((DSString(s[8]) == "                          "));
 REQUIRE((DSString(s[0].getData()) == "testString"));
 REQUIRE((DSString(s[1].getData()) == "a test string"));
+}
 
 SECTION("Vector"){
 vector<DSString> testVect;
@@ -117,10 +118,40 @@ testVect.push_back(DSString(s[1].getData()));
 REQUIRE((testVect[4] == s[1]));
 REQUIRE((testVect[4] == testVect[1]));
 REQUIRE((testVect[4] == s[1].getData()));
-
 }
 
+SECTION("Resize") {
+s[0].resize(15);
+s[1].resize(30);
+s[2].resize(2);
+REQUIRE((s[0].getCap() == 16));
+REQUIRE((s[1].getCap() == 31));
+REQUIRE((s[2].getCap() == 3));
+}
 
+SECTION("Get Functions") {
+REQUIRE((s[0].getCap() == 11));
+REQUIRE((s[1].getCap() == 14));
+REQUIRE((s[2].getCap() == 1));
+
+REQUIRE((s[0].getLength() == 10));
+REQUIRE((s[1].getLength() == 13));
+REQUIRE((s[2].getLength() == 0));
+
+REQUIRE((strcmp(s[0].getData(), "testString") == 0));
+REQUIRE((strcmp(s[1].getData(),"a test string") == 0));
+REQUIRE((strcmp(s[2].getData(),"") == 0));
+}
+
+SECTION("Append"){
+s[0].append('a');
+s[1].append(' ');
+s[2].append('c');
+s[5].append('d');
+REQUIRE((s[0] == "testStringa"));
+REQUIRE((s[1] == "a test string "));
+REQUIRE((s[2] == "c"));
+REQUIRE((s[5] == "\nd"));
 }
 
 

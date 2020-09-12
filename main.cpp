@@ -28,6 +28,7 @@ int main(int argc, char* argv[]) {
     ifstream inFile;
     inFile.open(argv[2]);
 
+    //runs the classifier
     run(fin, inFile);
 
 
