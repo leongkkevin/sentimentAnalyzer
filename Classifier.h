@@ -223,7 +223,7 @@ float findAccuracy(vector<DSString> testRatingVector, vector<DSString> predicted
 }
 
 //classifies test and outputs the answer into the output file
-void classifyTestComments(ifstream &fin, map<DSString,int> &wordBank){
+void classifyTestComments(ifstream &fin, map<DSString,int> &wordBank, ofstream &fout){
     //parse each test review into individual reviews
     vector<DSString> testReviewVector;
     fileParse(fin, testReviewVector, 10000);
@@ -242,16 +242,15 @@ void classifyTestComments(ifstream &fin, map<DSString,int> &wordBank){
     float accuracy = findAccuracy(testRatingVector, predictedRatingVector, wrongReviewNumbers);
 
     //outputs the percent accuracy and wrong review sentiment locations to output file
-    ofstream outFile("output01.txt");
-    outFile << accuracy << endl;
+    fout << accuracy << endl;
     for(int i = 0; i < wrongReviewNumbers.size(); ++i){
-        outFile << wrongReviewNumbers.at(i) << endl;
+        fout << wrongReviewNumbers.at(i) << endl;
     }
 }
 
 
 //runs the program
-void run(ifstream &fin, ifstream &inFile){
+void run(ifstream &fin, ifstream &inFile, ofstream &fout){
 
     //gets header
     getTop(fin);
@@ -273,7 +272,7 @@ void run(ifstream &fin, ifstream &inFile){
     map<DSString, int> wordBank;
     generateWordBank(inFile, positiveComments, negativeComments, wordBankVector, wordBank);
 
-    classifyTestComments(fin, wordBank);
+    classifyTestComments(fin, wordBank, fout);
 
 }
 

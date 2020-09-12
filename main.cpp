@@ -28,8 +28,10 @@ int main(int argc, char* argv[]) {
     ifstream inFile;
     inFile.open(argv[2]);
 
+    ofstream fout;
+    fout.open(argv[3]);
     //runs the classifier
-    run(fin, inFile);
+    run(fin, inFile, fout);
 
 
     return 0;
